@@ -13,13 +13,15 @@ d3.select('div#submit').on('click', function () {
 
   var minutes = d3.select('input').node().value
   console.log(minutes)
+  console.log(new Date(Date.now() - (minutes * 60 * 1000)).valueOf())
+  var datetime = new Date(Date.now() - (minutes * 60 * 1000)).valueOf()
 
   $.ajax({
     type: 'POST',
     url: '/feed',
     data: JSON.stringify({
       ounces: oz,
-      datetime: (new Date(Date.now() - (minutes * 60 * 100)).valueOf())
+      datetime: (datetime)
     }),
     contentType: 'application/json'
   }).done(function (d) {
