@@ -1,4 +1,4 @@
-# javascript computer vision https livereload + browserify
+# default server stuff
 
 run `npm install` to install dependencies
 

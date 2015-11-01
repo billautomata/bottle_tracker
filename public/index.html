@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <style>
     body {
-      padding-top: 50px;
+      /*padding-top: 50px;*/
       padding-bottom: 20px;
     }
   </style>
@@ -22,11 +22,35 @@
 </head>
 
 <body>
+  <div class='container'>
+    <div class='col-xs-12 text-center'>
+      <h5>BOTTLETRACKER</h5>
+    </div>
+    <div class='col-xs-12' id='result'></div>
+    <div class='row'>
+      <div class='col-xs-12 text-center'>
+        <h4>how many ounces was this bottle?</h4>
+      </div>
+      <div id='ounces' picked='false' class='col-xs-4 btn btn-default'>2</div>
+      <div id='ounces' picked='true' class='col-xs-4 btn btn-primary'>4</div>
+      <div id='ounces' picked='false' class='col-xs-4 btn btn-default'>6</div>
+    </div>
+    <hr class='row col-xs-12'>
+    <div class='row'>
+      <div class='col-xs-12 text-center'>
+        <h4>how many minutes ago?</h4>
+      </div>
+      <input type='text' pattern="\d*" class='col-xs-12 text-center' value='10'></input>
+    </div>
+    <hr class='row col-xs-12'>
+    <div id='submit' class='col-xs-12 btn btn-default'>submit</div>
+    <hr class='row col-xs-12'>
+    <div id='latest'></div>
+  </div>
 
-  <div class='col-xs-12'>hi</div>
-
-  <script src="js/vendor/jquery-1.11.2.js"></script>
-  <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/vendor/jquery-2.1.4.js" type='text/javascript'></script>
+  <script src="js/vendor/bootstrap.min.js" type='text/javascript'></script>
+  <script src="js/vendor/d3.min.js" type='text/javascript' charset='utf-8'></script>
 
   <script src="build/bundle.js"></script>
   <!-- <script src='https://localhost:9000/livereload.js'></script> -->
