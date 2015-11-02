@@ -3243,12 +3243,14 @@ function get_latest () {
     console.log(d)
 
     d.forEach(function (element) {
-      var div_local = parent.append('div').attr('class', 'col-xs-12')
-      div_local.append('h4').html(element.ounces + ' ounces')
-      div_local.append('h6').html(moment(element.datetime).format('dddd MMM D hh:mm A'))
-      div_local.append('div').attr('class', 'col-xs-12 btn btn-default').html('remove')
+      var div_local = parent.append('div').attr('class', 'row')
+      var div_l = div_local.append('div').attr('class', 'col-xs-9')
+      var div_r = div_local.append('div').attr('class', 'col-xs-3')
+      div_l.append('h4').html(element.ounces + ' ounces')
+      div_l.append('h6').html(moment(element.datetime).format('dddd MMM D hh:mm A'))
+      var btn = div_r.append('div').attr('class', 'col-xs-12 btn btn-default text-center').html('x')
 
-      div_local.on('click', function () {
+      btn.on('click', function () {
         $.get('/remove/' + element._id).done(function (d) {
           console.log(d)
           get_latest()
