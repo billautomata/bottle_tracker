@@ -19,6 +19,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-run": "^0.3.0",
     "grunt-standard": "^2.0.0",
+    "moment": "^2.10.6",
     "mongojs": "^1.4.1",
     "restify": "^4.0.3"
   },

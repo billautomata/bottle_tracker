@@ -1,5 +1,6 @@
 var $ = window.$
 var d3 = window.d3
+var moment = require('moment')
 
 d3.select('div#submit').on('click', function () {
   var oz = 0
@@ -47,7 +48,7 @@ function get_latest () {
     d.forEach(function (element) {
       var div_local = parent.append('div').attr('class', 'col-xs-12')
       div_local.append('h4').html(element.ounces + ' ounces')
-      div_local.append('h6').html(new Date(element.datetime))
+      div_local.append('h6').html(moment(element.datetime).format('dddd MMM D hh:mm A'))
       div_local.append('div').attr('class', 'col-xs-12 btn btn-default').html('remove')
 
       div_local.on('click', function () {
