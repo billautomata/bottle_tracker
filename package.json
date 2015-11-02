@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "create_keys": "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx.key -out nginx.crt",
-    "start": "node server.js"
+    "start": "grunt watch & supervisor -w server.js server.js;"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +21,7 @@
     "grunt-standard": "^2.0.0",
     "moment": "^2.10.6",
     "mongojs": "^1.4.1",
-    "restify": "^4.0.3"
+    "supervisor": "^0.9.1"
   },
   "repository": {
     "type": "git",
