@@ -3216,6 +3216,7 @@ module.exports = function get_latest () {
     var hours_since_last_bottle = ((((Date.now() - d[0].datetime) / 1000) / 60) / 60)
 
     var time_limit_hours = ((((d[0].datetime - d[bottles_to_serve - 1].datetime) / 1000) / 60) / 60)
+    var avg_hours_per_bottle = time_limit_hours / (bottles_to_serve - 1)
     var limit_ounces = 0
     var limit_ounces_per_hour = 0
 
@@ -3238,7 +3239,7 @@ module.exports = function get_latest () {
         limit_ounces += element.ounces
       }
     })
-    limit_ounces_per_hour = limit_ounces / time_limit_hours
+    limit_ounces_per_hour = limit_ounces / (avg_hours_per_bottle * bottles_to_serve)
 
     var number_of_hours_in_dataset = ((((d[0].datetime - begin_time) / 1000) / 60) / 60)
     ounces_per_hour = sum_of_ounces / number_of_hours_in_dataset
@@ -3290,7 +3291,7 @@ module.exports = function get_latest () {
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last ' + time_limit_hours.toFixed(2) + ' hours')
+      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last ' + (avg_hours_per_bottle * bottles_to_serve).toFixed(2) + ' hours')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
