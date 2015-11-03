@@ -35,7 +35,7 @@ module.exports = function get_latest () {
       }
       sum_of_ounces += element.ounces
       // console.log(element.datetime)
-      if (element.datetime >= (Date.now() - (time_limit_hours * 60 * 60 * 1000))) {
+      if (element.datetime >= (Date.now() - (time_limit_hours * 60 * 61 * 1000))) {
         console.log(element)
         limit_ounces += element.ounces
       }
