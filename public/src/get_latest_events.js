@@ -17,7 +17,7 @@ module.exports = function get_latest () {
 
     var hours_since_last_bottle = ((((Date.now() - d[0].datetime) / 1000) / 60) / 60)
 
-    var time_limit_hours = 4
+    var time_limit_hours = ((((Date.now() - d[3].datetime) / 1000) / 60) / 60)
     var limit_ounces = 0
     var limit_ounces_per_hour = 0
 
@@ -35,7 +35,7 @@ module.exports = function get_latest () {
       }
       sum_of_ounces += element.ounces
       // console.log(element.datetime)
-      if (element.datetime > (Date.now() - (time_limit_hours * 60 * 60 * 1000))) {
+      if (element.datetime >= (Date.now() - (time_limit_hours * 60 * 60 * 1000))) {
         console.log(element)
         limit_ounces += element.ounces
       }
@@ -92,7 +92,7 @@ module.exports = function get_latest () {
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last ' + time_limit_hours + ' hours')
+      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last ' + time_limit_hours.toFixed(2) + ' hours')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
