@@ -53,13 +53,34 @@ module.exports = function get_latest () {
     console.log('limit ounces', limit_ounces)
     console.log('limit hours', time_limit_hours)
 
-    var hrs_til_match = ((limit_ounces * number_of_hours_in_dataset) / sum_of_ounces) - time_limit_hours
+    var hrs_til_match = ((limit_ounces * number_of_hours_in_dataset) / sum_of_ounces)
+    hrs_til_match -= time_limit_hours
     console.log('hours until they match', hrs_til_match)
 
-    var hrs_til_feed = (((limit_ounces + 4) * number_of_hours_in_dataset) / sum_of_ounces) - time_limit_hours
+    var hrs_til_feed = (((limit_ounces + 4) * number_of_hours_in_dataset) / sum_of_ounces)
+    hrs_til_feed -= time_limit_hours
     console.log('hours until the next feed', hrs_til_feed)
 
+    var ms_til_match = hrs_til_match * 60 * 60 * 1000
+    var ms_til_feed = hrs_til_feed * 60 * 60 * 1000
+    var time_of_next_feed_minimum = ms_til_match + d[0].datetime
+    var time_of_next_feed_maximum = ms_til_feed + d[0].datetime
+
+    console.log(new Date(time_of_next_feed_maximum))
+    console.log(new Date(time_of_next_feed_minimum))
+
+    var calced_hrs_max = (new Date(time_of_next_feed_maximum).valueOf() - Date.now()) / 1000 / 60 / 60
+    console.log(calced_hrs_max)
+    var calced_hrs_min = (new Date(time_of_next_feed_minimum).valueOf() - Date.now()) / 1000 / 60 / 60
+    console.log(calced_hrs_min)
+
     // render stats
+    var div_min = parent.append('div').html('feed him after').attr('class', 'col-xs-12 text-center')
+    div_min.append('h3').html(moment(time_of_next_feed_minimum).format('h:mm A'))
+    var div_max = parent.append('div').html('feed him no later than').attr('class', 'col-xs-12 text-center')
+    div_max.append('h3').html(moment(time_of_next_feed_maximum).format('h:mm A'))
+
+    parent.append('hr').attr('class', 'col-xs-12')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
@@ -71,15 +92,15 @@ module.exports = function get_latest () {
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last 4 hours')
+      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last ' + time_limit_hours + ' hours')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(hrs_til_feed.toFixed(2) + ' maximum hours until his next feeding')
+      .text(calced_hrs_min.toFixed(2) + ' hours until it was okay to feed him')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(hrs_til_match.toFixed(2) + ' minimum hours until his next feeding')
+      .text(calced_hrs_max.toFixed(2) + ' maximum hours until his next feeding')
 
     parent.append('hr').attr('class', 'col-xs-12')
 
