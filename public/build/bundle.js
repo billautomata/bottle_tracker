@@ -3203,6 +3203,8 @@ module.exports = function get_latest () {
   $.get('/latest').done(function (d) {
     var parent = d3.select('div#latest')
     parent.selectAll('div').remove()
+    parent.selectAll('h3').remove()
+    parent.selectAll('hr').remove()
 
     console.log(d)
 
