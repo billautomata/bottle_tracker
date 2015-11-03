@@ -3212,9 +3212,46 @@ module.exports = function get_latest () {
 
     var hours_since_last_bottle = ((((Date.now() - d[0].datetime) / 1000) / 60) / 60)
 
+    var time_limit_hours = 4
+    var limit_ounces = 0
+    var limit_ounces_per_hour = 0
+
+    var ounces_per_hour = 0
+    var begin_time = Number.MAX_SAFE_INTEGER
+    var end_time = 0
+    var sum_of_ounces = 0
+
+    d.forEach(function (element) {
+      if (element.datetime < begin_time) {
+        begin_time = element.datetime
+      }
+      if (element.datetime > end_time) {
+        end_time = element.datetime
+      }
+      sum_of_ounces += element.ounces
+      // console.log(element.datetime)
+      if (element.datetime > (Date.now() - (time_limit_hours * 60 * 60 * 1000))) {
+        console.log(element)
+        limit_ounces += element.ounces
+      }
+    })
+    limit_ounces_per_hour = limit_ounces / time_limit_hours
+
+    var number_of_hours_in_dataset = ((((Date.now() - begin_time) / 1000) / 60) / 60)
+    ounces_per_hour = sum_of_ounces / number_of_hours_in_dataset
+    console.log(ounces_per_hour)
+
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
       .text(hours_since_last_bottle.toFixed(2) + ' hours since the last bottle.')
+
+    parent.append('h3')
+      .attr('class', 'col-xs-12 text-center')
+      .text(ounces_per_hour.toFixed(2) + ' ounces per hour overall')
+
+    parent.append('h3')
+      .attr('class', 'col-xs-12 text-center')
+      .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last 4 hours')
 
     d.forEach(function (element) {
       var div_local = parent.append('div').attr('class', 'row')
