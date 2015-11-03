@@ -58,7 +58,7 @@ app.get('/latest', function (req, res) {
         _id: -1
       },
     }, {}, {
-      limit: 25
+      limit: 250
     },
     function (err, data) {
       if (err) {
