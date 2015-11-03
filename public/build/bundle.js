@@ -3195,52 +3195,26 @@
 
 }));
 },{}],2:[function(require,module,exports){
-var $ = window.$
 var d3 = window.d3
+var $ = window.$
 var moment = require('moment')
 
-d3.select('div#submit').on('click', function () {
-  var oz = 0
-  d3.selectAll('div#ounces').each(function (d, i) {
-    var is_picked = d3.select(this).attr('picked')
-    if (is_picked === 'true') {
-      oz = (i * 2) + 2
-    }
-  })
-
-  var minutes = d3.select('input').node().value
-  console.log(minutes)
-  console.log(new Date(Date.now() - (minutes * 60 * 1000)).valueOf())
-  var datetime = new Date(Date.now() - (minutes * 60 * 1000)).valueOf()
-
-  $.ajax({
-    type: 'POST',
-    url: '/feed',
-    data: JSON.stringify({
-      ounces: oz,
-      datetime: (datetime)
-    }),
-    contentType: 'application/json'
-  }).done(function (d) {
-    console.log('done!')
-    console.log(d)
-    get_latest()
-  }).error(function (status, msg) {
-    console.log(status, msg, 'error!')
-  })
-})
-
-d3.selectAll('div#ounces').on('click', function () {
-  d3.selectAll('div#ounces').attr('picked', 'false').attr('class', 'col-xs-4 btn btn-default')
-  d3.select(this).attr('picked', 'true').attr('class', 'col-xs-4 btn btn-primary')
-})
-
-function get_latest () {
+module.exports = function get_latest () {
   $.get('/latest').done(function (d) {
     var parent = d3.select('div#latest')
     parent.selectAll('div').remove()
 
     console.log(d)
+
+    d = d.sort(function (a, b) {
+      return b.datetime - a.datetime
+    })
+
+    var hours_since_last_bottle = ((((Date.now() - d[0].datetime) / 1000) / 60) / 60)
+
+    parent.append('h3')
+      .attr('class', 'col-xs-12 text-center')
+      .text(hours_since_last_bottle.toFixed(2) + ' hours since the last bottle.')
 
     d.forEach(function (element) {
       var div_local = parent.append('div').attr('class', 'row')
@@ -3262,7 +3236,58 @@ function get_latest () {
   })
 }
 
-get_latest()
-// d3.select('div.container').append('div')
+},{"moment":1}],3:[function(require,module,exports){
+require('./submit_button.js')()
+require('./setup_ounces_buttons.js')()
+require('./get_latest_events.js')()
 
-},{"moment":1}]},{},[2]);
+},{"./get_latest_events.js":2,"./setup_ounces_buttons.js":4,"./submit_button.js":5}],4:[function(require,module,exports){
+var d3 = window.d3
+
+module.exports = function () {
+  // setup the state on the ounces buttons
+  d3.selectAll('div#ounces').on('click', function () {
+    d3.selectAll('div#ounces').attr('picked', 'false').attr('class', 'col-xs-4 btn btn-default')
+    d3.select(this).attr('picked', 'true').attr('class', 'col-xs-4 btn btn-primary')
+  })
+}
+
+},{}],5:[function(require,module,exports){
+var d3 = window.d3
+var $ = window.$
+
+module.exports = function () {
+  // on submit
+  d3.select('div#submit').on('click', function () {
+    var oz = 0
+    d3.selectAll('div#ounces').each(function (d, i) {
+      var is_picked = d3.select(this).attr('picked')
+      if (is_picked === 'true') {
+        oz = (i * 2) + 2
+      }
+    })
+
+    var minutes = d3.select('input').node().value
+    console.log(minutes)
+    console.log(new Date(Date.now() - (minutes * 60 * 1000)).valueOf())
+    var datetime = new Date(Date.now() - (minutes * 60 * 1000)).valueOf()
+
+    $.ajax({
+      type: 'POST',
+      url: '/feed',
+      data: JSON.stringify({
+        ounces: oz,
+        datetime: (datetime)
+      }),
+      contentType: 'application/json'
+    }).done(function (d) {
+      console.log('done!')
+      console.log(d)
+      return require('./get_latest_events.js')()
+    }).error(function (status, msg) {
+      return console.log(status, msg, 'error!')
+    })
+  })
+}
+
+},{"./get_latest_events.js":2}]},{},[3]);
