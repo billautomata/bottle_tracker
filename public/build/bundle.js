@@ -3241,6 +3241,21 @@ module.exports = function get_latest () {
     ounces_per_hour = sum_of_ounces / number_of_hours_in_dataset
     console.log(ounces_per_hour)
 
+    // in how many hours will the limit_ounces_per_hour match the overall ounces per hour
+    console.log('total ounces', sum_of_ounces)
+    console.log('total hours', number_of_hours_in_dataset)
+
+    console.log('limit ounces', limit_ounces)
+    console.log('limit hours', time_limit_hours)
+
+    var hrs_til_match = ((limit_ounces * number_of_hours_in_dataset) / sum_of_ounces) - time_limit_hours
+    console.log('hours until they match', hrs_til_match)
+
+    var hrs_til_feed = (((limit_ounces + 4) * number_of_hours_in_dataset) / sum_of_ounces) - time_limit_hours
+    console.log('hours until the next feed', hrs_til_feed)
+
+    // render stats
+
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
       .text(hours_since_last_bottle.toFixed(2) + ' hours since the last bottle.')
@@ -3252,6 +3267,16 @@ module.exports = function get_latest () {
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
       .text(limit_ounces_per_hour.toFixed(2) + ' ounces per hour in the last 4 hours')
+
+    parent.append('h3')
+      .attr('class', 'col-xs-12 text-center')
+      .text(hrs_til_feed.toFixed(2) + ' maximum hours until his next feeding')
+
+    parent.append('h3')
+      .attr('class', 'col-xs-12 text-center')
+      .text(hrs_til_match.toFixed(2) + ' minimum hours until his next feeding')
+
+    parent.append('hr').attr('class', 'col-xs-12')
 
     d.forEach(function (element) {
       var div_local = parent.append('div').attr('class', 'row')
