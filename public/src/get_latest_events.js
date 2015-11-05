@@ -15,7 +15,17 @@ module.exports = function get_latest () {
       return b.datetime - a.datetime
     })
 
-    var bottles_to_serve = 4
+    var bottles_to_serve = -1
+
+    var oz_to_track = 20
+    var tracked_oz = 0
+    d.forEach(function (element, element_idx) {
+      tracked_oz += element.ounces
+      if (tracked_oz >= oz_to_track && bottles_to_serve === -1) {
+        bottles_to_serve = element_idx + 1
+      }
+    })
+
     var hours_since_last_bottle = ((((Date.now() - d[0].datetime) / 1000) / 60) / 60)
 
     var time_limit_hours = ((((d[0].datetime - d[bottles_to_serve - 1].datetime) / 1000) / 60) / 60)
@@ -38,7 +48,7 @@ module.exports = function get_latest () {
       sum_of_ounces += element.ounces
       // console.log(element.datetime)
       if (element.datetime >= d[bottles_to_serve - 1].datetime && element.datetime <= d[0].datetime) {
-        console.log(element)
+        console.log('using this bottle to calculate current rate', element)
         limit_ounces += element.ounces
       }
     })
@@ -59,7 +69,8 @@ module.exports = function get_latest () {
     hrs_til_match -= time_limit_hours
     console.log('hours until they match', hrs_til_match)
 
-    var hrs_til_feed = (((limit_ounces + 4) * number_of_hours_in_dataset) / sum_of_ounces)
+    // var hrs_til_feed = (((limit_ounces + 4) * number_of_hours_in_dataset) / sum_of_ounces)
+    var hrs_til_feed = (((limit_ounces + 4) * time_limit_hours) / limit_ounces)
     hrs_til_feed -= time_limit_hours
     console.log('hours until the next feed', hrs_til_feed)
 
@@ -77,20 +88,20 @@ module.exports = function get_latest () {
     console.log(calced_hrs_min)
 
     // render stats
-    var div_min = parent.append('div').html('feed him after').attr('class', 'col-xs-12 text-center')
-    div_min.append('h3').html(moment(time_of_next_feed_minimum).format('h:mm A'))
-    var div_max = parent.append('div').html('feed him no later than').attr('class', 'col-xs-12 text-center')
+    // var div_min = parent.append('div').html('feed him after').attr('class', 'col-xs-12 text-center')
+    // div_min.append('h3').html(moment(time_of_next_feed_minimum).format('h:mm A'))
+    var div_max = parent.append('div').html('you have until').attr('class', 'col-xs-12 text-center')
     div_max.append('h3').html(moment(time_of_next_feed_maximum).format('h:mm A'))
 
     parent.append('hr').attr('class', 'col-xs-12')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(hours_since_last_bottle.toFixed(2) + ' hours since the last bottle.')
+      .text((calced_hrs_max * 60).toFixed(0) + ' minutes until his next feeding (4oz)')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(ounces_per_hour.toFixed(2) + ' ounces per hour overall')
+      .text((hours_since_last_bottle * 60).toFixed(0) + ' minutes since the last bottle.')
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
@@ -98,11 +109,7 @@ module.exports = function get_latest () {
 
     parent.append('h3')
       .attr('class', 'col-xs-12 text-center')
-      .text(calced_hrs_min.toFixed(2) + ' hours until it was okay to feed him')
-
-    parent.append('h3')
-      .attr('class', 'col-xs-12 text-center')
-      .text(calced_hrs_max.toFixed(2) + ' maximum hours until his next feeding')
+      .text(ounces_per_hour.toFixed(2) + ' ounces per hour overall')
 
     parent.append('hr').attr('class', 'col-xs-12')
 
