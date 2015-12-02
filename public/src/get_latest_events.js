@@ -130,5 +130,7 @@ module.exports = function get_latest () {
 
       div_local.append('hr').attr('class', 'col-xs-4')
     })
+
+    require('./graph_bottles.js')(d)
   })
 }

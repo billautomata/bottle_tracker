@@ -8,7 +8,7 @@ module.exports = function () {
     d3.selectAll('div#ounces').each(function (d, i) {
       var is_picked = d3.select(this).attr('picked')
       if (is_picked === 'true') {
-        oz = (i * 2) + 2
+        oz = i + 1
       }
     })
 

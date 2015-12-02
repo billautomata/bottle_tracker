@@ -3327,26 +3327,49 @@ module.exports = function get_latest () {
 
       div_local.append('hr').attr('class', 'col-xs-4')
     })
+
+    require('./graph_bottles.js')(d)
   })
 }
 
-},{"moment":1}],3:[function(require,module,exports){
+},{"./graph_bottles.js":3,"moment":1}],3:[function(require,module,exports){
+module.exports = function graph_bottles (data) {
+  data.forEach(function (element) {
+    console.log(element)
+  })
+  calc_rolling_rate_byounces(data, 4)
+}
+
+function calc_rolling_rate_byounces (data, n_ounces) {
+  var n_bottles = -1
+  var tally_ounces = 0
+  data.forEach(function (element, element_idx) {
+    if (n_bottles === -1) {
+      tally_ounces += element.ounces
+      if (tally_ounces >= n_ounces) {
+        n_bottles = element_idx
+      }
+    }
+  })
+}
+
+},{}],4:[function(require,module,exports){
 require('./submit_button.js')()
 require('./setup_ounces_buttons.js')()
 require('./get_latest_events.js')()
 
-},{"./get_latest_events.js":2,"./setup_ounces_buttons.js":4,"./submit_button.js":5}],4:[function(require,module,exports){
+},{"./get_latest_events.js":2,"./setup_ounces_buttons.js":5,"./submit_button.js":6}],5:[function(require,module,exports){
 var d3 = window.d3
 
 module.exports = function () {
   // setup the state on the ounces buttons
   d3.selectAll('div#ounces').on('click', function () {
-    d3.selectAll('div#ounces').attr('picked', 'false').attr('class', 'col-xs-4 btn btn-default')
-    d3.select(this).attr('picked', 'true').attr('class', 'col-xs-4 btn btn-primary')
+    d3.selectAll('div#ounces').attr('picked', 'false').attr('class', 'col-xs-2 btn btn-default')
+    d3.select(this).attr('picked', 'true').attr('class', 'col-xs-2 btn btn-primary')
   })
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var d3 = window.d3
 var $ = window.$
 
@@ -3357,7 +3380,7 @@ module.exports = function () {
     d3.selectAll('div#ounces').each(function (d, i) {
       var is_picked = d3.select(this).attr('picked')
       if (is_picked === 'true') {
-        oz = (i * 2) + 2
+        oz = i + 1
       }
     })
 
@@ -3384,4 +3407,4 @@ module.exports = function () {
   })
 }
 
-},{"./get_latest_events.js":2}]},{},[3]);
+},{"./get_latest_events.js":2}]},{},[4]);
