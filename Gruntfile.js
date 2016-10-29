@@ -18,6 +18,16 @@ module.exports = function (grunt) {
         options: {
           transform: ['brfs']
         }
+      },
+      viz: {
+        src: './webapp/main.js',
+        dest: 'public/build/viz.js',
+        files: {
+          'public/build/viz.js': ['./webapp/*.js'],
+        },
+        options: {
+          transform: ['brfs']
+        }
       }
     },
     // standard linting
@@ -30,12 +40,33 @@ module.exports = function (grunt) {
         src: [
           './public/src/*.js'
         ]
+      },
+      viz: {
+        options: {
+          format: true,
+          lint: true
+        },
+        src: [
+          './webapp/*.js'
+        ]
       }
     },
     watch: {
       everything: {
         files: ['./public/*.html','./public/src/*.js', './public/css/*.css' ],
         tasks: ['standard', 'browserify'],
+        options: {
+          livereload: {
+            port: 35729,
+            // key: grunt.file.read('nginx.key'),
+            // cert: grunt.file.read('nginx.crt')
+            // you can pass in any other options you'd like to the https server, as listed here: http://nodejs™.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
+          }
+        },
+      },
+      viz: {
+        files: ['./public/*.html','./webapp/*.js', './public/css/*.css' ],
+        tasks: ['standard:viz', 'browserify:viz'],
         options: {
           livereload: {
             port: 35729,
